@@ -35,6 +35,7 @@ def main():
         dated_url = url.format(date, date)
         response = requests.get(url=dated_url, headers=token)
         if response.status_code == 200 and response.content:
+            print(f"Loading {date}")
             load_mongo_db('noaa', 'precipitation', response.json()['results'])
 
 
