@@ -1,8 +1,10 @@
 """
 Load data into mongo database.
 """
+import datetime
 import requests
 import yaml
+
 
 from typing import List, Dict
 
@@ -27,18 +29,21 @@ def main():
     url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data'
     '?datasetid=GHCND'
     '&locationid=CITY:US530018'
-    '&startdate={}'
+    '&startdate={}-{}-{}'
     '&enddate={}'
 
-    start_date = 
-    end_date = 
+    start_datetime = datetime.datetime(2000, 1, 1)
+    end_date = datetime.datetime(2018, 1, 1)
 
     with open('.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
 
-    for dat
+    for date in 
 
-def get_date_range(dates: str) -> Dict:
+
+def 
+
+def get_noaa_data(dates: str) -> Dict:
     """
     """
     response = requests.get(url=url, headers=token)
