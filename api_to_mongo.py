@@ -6,7 +6,7 @@ import requests
 import yaml
 
 
-from typing import List, Dict, Date
+from typing import List, Dict
 
 from pymongo import MongoClient
 
@@ -15,23 +15,25 @@ def main():
     """
     Load stuff from api.
     """
-    url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data'
-    '?datasetid=GHCND'
-    '&locationid=CITY:US530018'
-    '&startdate={}'
-    '&enddate={}'
+    url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data' \
+          '?datasetid=GHCND' \
+          '&locationid=CITY:US530018' \
+          '&startdate={}' \
+          '&enddate={}'
 
-    with open('.secrets/noaa_api_key.yaml') as f:
+    with open('/home/kurtrm/.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
 
     start = datetime.date(2000, 1, 1)
-    end = datetime.date(2018, 1, 1)
+    end = datetime.date(2000, 1, 2)
     dates = date_range(start, end)
 
     for date in dates:
         dated_url = url.format(date, date)
         response = requests.get(url=dated_url, headers=token)
-        load_mongo_db('noaa', 'precipitation', response.json()['results'])
+        if response.status_code == 200 and response.content:
+            # import pdb; pdb.set_trace()
+            load_mongo_db('noaa', 'precipitation', response.json()['results'])
 
 
 def load_mongo_db(db: str, collections: str, items: List[Dict]) -> None:
