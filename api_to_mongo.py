@@ -3,6 +3,7 @@ Load data into mongo database.
 """
 import datetime
 import requests
+import time
 import yaml
 
 
@@ -27,7 +28,7 @@ def main():
         token = yaml.load(f)
 
     start = datetime.date(2000, 1, 1)
-    end = datetime.date(2000, 1, 2)
+    end = datetime.date(2018, 1, 2)
     dates = date_range(start, end)
 
     for date in dates:
