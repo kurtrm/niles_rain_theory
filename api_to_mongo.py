@@ -29,21 +29,26 @@ def main():
     url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data'
     '?datasetid=GHCND'
     '&locationid=CITY:US530018'
-    '&startdate={}-{}-{}'
+    '&startdate={}'
     '&enddate={}'
-
-    start_datetime = datetime.datetime(2000, 1, 1)
-    end_date = datetime.datetime(2018, 1, 1)
 
     with open('.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
 
-    for date in 
+    start = datetime.datetime(2000, 1, 1)
+    end = datetime.datetime(2018, 1, 1)
+    dates = date_range(start, end)
+
+    for date in dates:
+        dated_url = url.format(date)
+        response = requests.get(url=dated_url, headers=token)
 
 
-def 
-
-def get_noaa_data(dates: str) -> Dict:
+def date_range(start, end):
     """
+    Yield dates to pass to the url string.
+    S/O for inspiration.
     """
-    response = requests.get(url=url, headers=token)
+    date_diff = int((end - start).days)
+    for diff in range(date_diff):
+        yield (start + datetime.timedelta(diff)).strftime('%Y-%m-%d')
