@@ -31,7 +31,7 @@ def main():
     for date in dates:
         dated_url = url.format(date, date)
         response = requests.get(url=dated_url, headers=token)
-        load_mongo_db('noaa', 'precipitation', response.json())
+        load_mongo_db('noaa', 'precipitation', response.json()['results'])
 
 
 def load_mongo_db(db: str, collections: str, items: List[Dict]) -> None:
