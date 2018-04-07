@@ -18,8 +18,10 @@ def main():
     url = 'https://www.ncdc.noaa.gov/cdo-web/api/v2/data' \
           '?datasetid=GHCND' \
           '&locationid=CITY:US530018' \
+          '&units=STANDARD' \
           '&startdate={}' \
-          '&enddate={}'
+          '&enddate={}' \
+          '&limit=1000'
 
     with open('/home/kurtrm/.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
@@ -32,7 +34,6 @@ def main():
         dated_url = url.format(date, date)
         response = requests.get(url=dated_url, headers=token)
         if response.status_code == 200 and response.content:
-            # import pdb; pdb.set_trace()
             load_mongo_db('noaa', 'precipitation', response.json()['results'])
 
 
