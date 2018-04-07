@@ -30,7 +30,15 @@ def main():
     '&startdate={}'
     '&enddate={}'
 
+    start_date = 
+    end_date = 
+
     with open('.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
 
-    response = requests.get(url=url, params=None, headers=token)
+    for dat
+
+def get_date_range(dates: str) -> Dict:
+    """
+    """
+    response = requests.get(url=url, headers=token)
