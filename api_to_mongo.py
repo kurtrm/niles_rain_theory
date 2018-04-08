@@ -20,23 +20,26 @@ def main():
           '?datasetid=GHCND' \
           '&locationid=CITY:US530018' \
           '&units=STANDARD' \
-          '&startdate={}' \
-          '&enddate={}' \
-          '&limit=1000'
+          '&startdate=2000-01-01' \
+          '&enddate=2018-01-01' \
+          '&limit=1000' \
+          '&offset={}'
 
     with open('/home/kurtrm/.secrets/noaa_api_key.yaml') as f:
         token = yaml.load(f)
 
-    start = datetime.date(2000, 1, 1)
-    end = datetime.date(2018, 1, 2)
-    dates = date_range(start, end)
+    offset = 1
 
-    for date in dates:
-        dated_url = url.format(date, date)
-        response = requests.get(url=dated_url, headers=token)
-        if response.status_code == 200 and response.content:
-            print(f"Loading {date}")
+    status = 200
+
+    while status == 200:
+        offset_url = url.format(offset)
+        response = requests.get(url=offset_url, headers=token)
+        status = response.status_code
+        if status == 200 and response.content:
+            print(f"Loading {offset}")
             load_mongo_db('noaa', 'precipitation', response.json()['results'])
+            offset += 1000
 
 
 def load_mongo_db(db: str, collections: str, items: List[Dict]) -> None:
@@ -55,7 +58,7 @@ def date_range(start: datetime.date, end: datetime.date) -> str:
     Yield dates to pass to the url string.
     S/O for inspiration.
     """
-    date_diff = int((end - start).days)
+    date_diff = int((end - start).months)
     for diff in range(date_diff):
         yield (start + datetime.timedelta(diff)).strftime('%Y-%m-%d')
 
