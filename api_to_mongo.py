@@ -36,6 +36,7 @@ def main():
         offset_url = url.format(offset)
         response = requests.get(url=offset_url, headers=token)
         status = response.status_code
+        # import pdb; pdb.set_trace()
         if status == 200 and response.content:
             print(f"Loading {offset}")
             load_mongo_db('noaa', 'precipitation', response.json()['results'])
